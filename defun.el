@@ -53,7 +53,61 @@
        (recursive-lengths-list-many-files
         (cdr list-of-files)))))
 
-(lengths-list-file "/usr/share/emacs/24.5/lisp/files.el.gz")
-(lengths-list-file "/usr/share/emacs/24.5/lisp/ses.el.gz")
+;;(length
+;; (directory-files "c:/emacs/share/emacs/25.2/lisp" t "\\.el$"))
 
-(setq lengths (recursive-lengths-list-many-files '("/usr/share/emacs/24.5/lisp/ses.el.gz" "/usr/share/emacs/24.5/lisp/files.el.gz"))
+(setq max-lisp-eval-depth 3000)
+
+;;(sort
+;;  (recursive-lengths-list-many-files
+;;    (directory-files "c:/emacs/share/emacs/25.2/lisp" t "\\.el$"))
+;;  '<)
+
+	
+(defvar top-of-ranges
+  '(10  20  30  40  50
+    60  70  80  90 100
+    110 120 130 140 150
+    160 170 180 190 200
+    210 220 230 240 250
+    260 270 280 290 300)
+  "Список задающий диапазоны для `defuns-per-range'.")
+
+(defun defuns-per-range (sorted-lengths top-of-ranges)
+  "Число функций в SORTED-LENGTHS в каждом диапазоне TOP-OF-RANGES."
+
+  (let ((top-of-range (car top-of-ranges))
+        (number-within-range 0)
+        defuns-per-range-list)
+
+    (while top-of-ranges
+
+      (while (and
+              (car sorted-lengths)
+              (< (car sorted-lengths) top-of-range))
+        (setq number-within-range (1+ number-within-range))
+        (setq sorted-lengths (cdr sorted-lengths)))
+
+      (setq defuns-per-range-list
+            (cons number-within-range defuns-per-range-list))
+      (setq number-within-range 0)
+
+      (setq top-of-ranges (cdr top-of-ranges))
+      (setq top-of-range (car top-of-ranges)))
+
+    (setq defuns-per-range-list
+          (cons
+           (length sorted-lengths)
+           defuns-per-range-list))
+
+    (nreverse defuns-per-range-list)))
+
+;; (В дальнейшем мы будем работать с большими списками.)
+(setq top-of-ranges        
+ '(110 120 130 140 150
+   160 170 180 190 200))
+
+(setq sorted-lengths
+      '(85 86 110 116 122 129 154 176 179 200 265 300 300))
+
+(defuns-per-range sorted-lengths top-of-ranges)
