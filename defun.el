@@ -102,16 +102,12 @@
 
     (nreverse defuns-per-range-list)))
 
-;; (В дальнейшем мы будем работать с большими списками.)
-(setq top-of-ranges        
- '(110 120 130 140 150
-   160 170 180 190 200))
 
-(setq sorted-lengths
-      '(85 86 110 116 122 129 154 176 179 200 265 300 300))
-
-(defuns-per-range sorted-lengths top-of-ranges)
-
+(defvar graph-symbol "*"
+  "Строка, используемая в качестве символа в графике, обычно -- звездочка.")
+(defvar graph-blank " "
+  "Строка, используемая в качестве пробела в графике, обычно -- пробел.
+graph-blank должны быть той же длины, что и graph-symbol.")
 
 (defun column-of-graph (max-graph-height actual-height)
   "Возвращает список строк, задающий одну колонку графика."
@@ -120,12 +116,13 @@
         (number-of-top-blanks (- max-graph-height actual-height)))
 
     (while (> actual-height 0)
-      (setq insert-list (cons "*" insert-list))
+      (setq insert-list (cons graph-symbol insert-list))
       (setq actual-height (1- actual-height)))
 
     (while (> number-of-top-blanks 0)
-      (setq insert-list (cons " " insert-list))
+      (setq insert-list (cons graph-blank insert-list))
       (setq number-of-top-blanks (1- number-of-top-blanks)))
 
     insert-list))
-
+	
+(column-of-graph 5 3)
