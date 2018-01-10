@@ -111,3 +111,21 @@
       '(85 86 110 116 122 129 154 176 179 200 265 300 300))
 
 (defuns-per-range sorted-lengths top-of-ranges)
+
+
+(defun column-of-graph (max-graph-height actual-height)
+  "Возвращает список строк, задающий одну колонку графика."
+
+  (let ((insert-list nil)
+        (number-of-top-blanks (- max-graph-height actual-height)))
+
+    (while (> actual-height 0)
+      (setq insert-list (cons "*" insert-list))
+      (setq actual-height (1- actual-height)))
+
+    (while (> number-of-top-blanks 0)
+      (setq insert-list (cons " " insert-list))
+      (setq number-of-top-blanks (1- number-of-top-blanks)))
+
+    insert-list))
+
