@@ -148,3 +148,39 @@ graph-blank должны быть той же длины, что и graph-symbol
     (insert "\n")
     ))
 
+	
+(defun recursive-graph-body-print-internal
+    (numbers-list height symbol-width)
+  "Печатает график.
+Используется внутри функции recursive-graph-body-print."
+
+  (if numbers-list
+      (progn
+        (setq from-position (point))
+        (insert-rectangle
+         (column-of-graph height (car numbers-list)))
+        (goto-char from-position)
+        (forward-char symbol-width)
+        (sit-for 0)     ; Отображает график колонка за колонкой.
+        (recursive-graph-body-print-internal
+         (cdr numbers-list) height symbol-width))))
+
+(defun recursive-graph-body-print (numbers-list)
+  "Выдает график из списка чисел NUMBERS-LIST.
+Список чисел состоит из значений по оси Y."
+  
+  (let ((height (apply 'max numbers-list))
+        (symbol-width (length graph-blank))
+        from-position)
+    (recursive-graph-body-print-internal
+     numbers-list
+     height
+     symbol-width)))
+
+    *        
+   **   *    
+  ****  *    
+  **** ***   
+* *********  
+************ 
+*************
