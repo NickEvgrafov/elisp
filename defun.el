@@ -125,4 +125,26 @@ graph-blank должны быть той же длины, что и graph-symbol
 
     insert-list))
 	
-(column-of-graph 5 3)
+(defun graph-body-print(numbers-list)
+  "Выдает столбцовый график на основе NUMBERS-LIST.
+Список чисел состоит из значений по оси Y."
+
+  (let ((height (apply 'max numbers-list))
+        (symbol-width (length graph-blank))
+        from-position)
+
+    (while numbers-list
+      (setq from-position (point))
+      (insert-rectangle
+       (column-of-graph height (car numbers-list)))
+
+      (goto-char from-position)
+      (forward-char symbol-width)
+
+      (sit-for 0)
+      (setq numbers-list (cdr numbers-list)))
+
+    (forward-line height)
+    (insert "\n")
+    ))
+
